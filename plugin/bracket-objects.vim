@@ -3,16 +3,33 @@ if exists("g:loaded_bracket_objects")
 endif
 let g:loaded_bracket_objects = 1
 
-function! BracketObject(direction, object)
-        normal! \<ESC>
-        let l:cur_pos = getpos('.')
-	exe "normal! v" . a:object . "\<ESC>"
-        if a:direction == "["
-            call setpos("'>", l:cur_pos)
-        else
-            call setpos("'<", l:cur_pos)
-        endif
-        normal gv
+function! BracketObject(direction, object) abort
+    normal! \<ESC>
+    let l:cur_pos = getpos('.')
+    exe "normal! v" . a:object . "\<ESC>"
+    if a:direction == "["
+        call setpos("'>", l:cur_pos)
+    else
+        call setpos("'<", l:cur_pos)
+    endif
+    normal! gv
+endfunction
+
+function! SelectBuffer() abort
+    normal! \<ESC>
+    call setpos("'<", [0, 1, 1, 0])
+    call setpos("'>", getpos('$'))
+    normal! gv$
+endfunction
+
+function! SelectInsideLine() abort
+    normal! \<ESC>
+    normal! ^vg_
+endfunction
+
+function! SelectAroundLine() abort
+    normal! \<ESC>
+    normal! 0v$
 endfunction
 
 " VIM built-in mappings
@@ -183,3 +200,100 @@ onoremap <silent> ]a` :call BracketObject("]", "a`")<CR>
 vnoremap <silent> ]a` :<C-u>call BracketObject("]", "a`")<CR>
 
 " TODO: add custom popular text-objects
+" https://github.com/wellle/targets.vim mappings
+if exists("g:loaded_targets")
+    onoremap <silent> [( :call BracketObject("[", "(")<CR>
+    vnoremap <silent> [( :<C-u>call BracketObject("[", "(")<CR>
+    onoremap <silent> ]( :call BracketObject("]", "(")<CR>
+    vnoremap <silent> ]( :<C-u>call BracketObject("]", "(")<CR>
+    onoremap <silent> [) :call BracketObject("[", ")")<CR>
+    vnoremap <silent> [) :<C-u>call BracketObject("[", ")")<CR>
+    onoremap <silent> ]) :call BracketObject("]", ")")<CR>
+    vnoremap <silent> ]) :<C-u>call BracketObject("]", ")")<CR>
+
+    onoremap <silent> [b :call BracketObject("[", "b")<CR>
+    vnoremap <silent> [b :<C-u>call BracketObject("[", "b")<CR>
+    onoremap <silent> ]b :call BracketObject("]", "b")<CR>
+    vnoremap <silent> ]b :<C-u>call BracketObject("]", "b")<CR>
+
+
+    onoremap <silent> [{ :call BracketObject("[", "{")<CR>
+    vnoremap <silent> [{ :<C-u>call BracketObject("[", "{")<CR>
+    onoremap <silent> ]{ :call BracketObject("]", "{")<CR>
+    vnoremap <silent> ]{ :<C-u>call BracketObject("]", "{")<CR>
+    onoremap <silent> [} :call BracketObject("[", "}")<CR>
+    vnoremap <silent> [} :<C-u>call BracketObject("[", "}")<CR>
+    onoremap <silent> ]} :call BracketObject("]", "}")<CR>
+    vnoremap <silent> ]} :<C-u>call BracketObject("]", "}")<CR>
+
+    onoremap <silent> [B :call BracketObject("[", "B")<CR>
+    vnoremap <silent> [B :<C-u>call BracketObject("[", "B")<CR>
+    onoremap <silent> ]B :call BracketObject("]", "B")<CR>
+    vnoremap <silent> ]B :<C-u>call BracketObject("]", "B")<CR>
+
+    onoremap <silent> [[ :call BracketObject("[", "[")<CR>
+    vnoremap <silent> [[ :<C-u>call BracketObject("[", "[")<CR>
+    onoremap <silent> ][ :call BracketObject("]", "[")<CR>
+    vnoremap <silent> ][ :<C-u>call BracketObject("]", "[")<CR>
+    onoremap <silent> [] :call BracketObject("[", "]")<CR>
+    vnoremap <silent> [] :<C-u>call BracketObject("[", "]")<CR>
+    onoremap <silent> ]] :call BracketObject("]", "]")<CR>
+    vnoremap <silent> ]] :<C-u>call BracketObject("]", "]")<CR>
+
+
+    onoremap <silent> [< :call BracketObject("[", "<")<CR>
+    vnoremap <silent> [< :<C-u>call BracketObject("[", "<")<CR>
+    onoremap <silent> ]< :call BracketObject("]", "<")<CR>
+    vnoremap <silent> ]< :<C-u>call BracketObject("]", "<")<CR>
+    onoremap <silent> [> :call BracketObject("[", ">")<CR>
+    vnoremap <silent> [> :<C-u>call BracketObject("[", ">")<CR>
+    onoremap <silent> ]> :call BracketObject("]", ">")<CR>
+    vnoremap <silent> ]> :<C-u>call BracketObject("]", ">")<CR>
+
+    onoremap <silent> [t :call BracketObject("[", "t")<CR>
+    vnoremap <silent> [t :<C-u>call BracketObject("[", "t")<CR>
+    onoremap <silent> ]t :call BracketObject("]", "t")<CR>
+    vnoremap <silent> ]t :<C-u>call BracketObject("]", "t")<CR>
+    " TODO, unfinished
+endif
+
+if exists("g:loaded_argumentative")
+    onoremap <silent> [i, :call BracketObject("[", "i,")<CR>
+    vnoremap <silent> [i, :<C-u>call BracketObject("[", "i,")<CR>
+    onoremap <silent> ]i, :call BracketObject("]", "i,")<CR>
+    vnoremap <silent> ]i, :<C-u>call BracketObject("]", "i,")<CR>
+    onoremap <silent> [a, :call BracketObject("[", "a,")<CR>
+    vnoremap <silent> [a, :<C-u>call BracketObject("[", "a,")<CR>
+    onoremap <silent> ]a, :call BracketObject("]", "a,")<CR>
+    vnoremap <silent> ]a, :<C-u>call BracketObject("]", "a,")<CR>
+endif
+
+if exists("g:indent_object_except_first_level")
+    onoremap <silent> [ii :call BracketObject("[", "ii")<CR>
+    vnoremap <silent> [ii :<C-u>call BracketObject("[", "ii")<CR>
+    onoremap <silent> ]ii :call BracketObject("]", "ii")<CR>
+    vnoremap <silent> ]ii :<C-u>call BracketObject("]", "ii")<CR>
+    onoremap <silent> [ai :call BracketObject("[", "ai")<CR>
+    vnoremap <silent> [ai :<C-u>call BracketObject("[", "ai")<CR>
+    onoremap <silent> ]ai :call BracketObject("]", "ai")<CR>
+    vnoremap <silent> ]ai :<C-u>call BracketObject("]", "ai")<CR>
+
+    onoremap <silent> [iI :call BracketObject("[", "iI")<CR>
+    vnoremap <silent> [iI :<C-u>call BracketObject("[", "iI")<CR>
+    onoremap <silent> ]iI :call BracketObject("]", "iI")<CR>
+    vnoremap <silent> ]iI :<C-u>call BracketObject("]", "iI")<CR>
+    onoremap <silent> [aI :call BracketObject("[", "aI")<CR>
+    vnoremap <silent> [aI :<C-u>call BracketObject("[", "aI")<CR>
+    onoremap <silent> ]aI :call BracketObject("]", "aI")<CR>
+    vnoremap <silent> ]aI :<C-u>call BracketObject("]", "aI")<CR>
+endif
+
+" whole buffer objects
+onoremap <silent> ie :call SelectBuffer()<CR>
+vnoremap <silent> ie :<C-u>call SelectBuffer()<CR>
+onoremap <silent> ae :call SelectBuffer()<CR>
+vnoremap <silent> ae :<C-u>call SelectBuffer()<CR>
+onoremap <silent> il :call SelectInsideLine()<CR>
+vnoremap <silent> il :<C-u>call SelectInsideLine()<CR>
+onoremap <silent> al :<C-u>call SelectAroundLine()<CR>
+vnoremap <silent> al :<C-u>call SelectAroundLine()<CR>
