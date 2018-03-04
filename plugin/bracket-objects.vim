@@ -32,6 +32,16 @@ function! SelectAroundLine() abort
     normal! 0v$
 endfunction
 
+function! SelectInsideUnderscore() abort
+    normal! \<ESC>
+    normal! T_vt_
+endfunction
+
+function! SelectAroundUnderscore() abort
+    normal! \<ESC>
+    normal! F_vf_
+endfunction
+
 " VIM built-in mappings
 onoremap <silent> [iw :call BracketObject("[", "iw")<CR>
 vnoremap <silent> [iw :<C-u>call BracketObject("[", "iw")<CR>
@@ -295,5 +305,9 @@ onoremap <silent> ae :call SelectBuffer()<CR>
 vnoremap <silent> ae :<C-u>call SelectBuffer()<CR>
 onoremap <silent> il :call SelectInsideLine()<CR>
 vnoremap <silent> il :<C-u>call SelectInsideLine()<CR>
-onoremap <silent> al :<C-u>call SelectAroundLine()<CR>
+onoremap <silent> al :call SelectAroundLine()<CR>
 vnoremap <silent> al :<C-u>call SelectAroundLine()<CR>
+onoremap <silent> i_ :call SelectInsideUnderscore()<CR>
+vnoremap <silent> i_ :<C-u>call SelectInsideUnderscore()<CR>
+onoremap <silent> a_ :call SelectAroundUnderscore()<CR>
+vnoremap <silent> a_ :<C-u>call SelectAroundUnderscore()<CR>
